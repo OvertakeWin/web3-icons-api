@@ -1,6 +1,6 @@
 name = "web3-icons-api"
 main = "src/index.ts"
-compatibility_date = "2025-01-01"
+compatibility_date = "2026-04-16"
 
 [[routes]]
 pattern = "web3icons.overtakegames.com"
