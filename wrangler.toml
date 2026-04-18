@@ -1,3 +1,7 @@
 name = "web3-icons-api"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
+
+[[routes]]
+pattern = "web3icons.overtakegames.com"
+custom_domain = true
