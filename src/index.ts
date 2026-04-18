@@ -67,7 +67,7 @@ export default {
       '1030': 'conflux',
       '888888888': 'xdai', // canto (uses same icon)
       '999999999': 'nativecanto',
-      '900': 'solana',
+      '34268394551451': 'solana',
     };
 
     const isNativeToken = address === '0' || address.toLowerCase() === '0x0000000000000000000000000000000000000000';
