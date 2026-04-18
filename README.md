@@ -14,3 +14,5 @@ Deploy as a Cloudflare Worker. Example request:
 ```
 GET /?chainId=1&address=0x6B175474E89094C44Da98b954EedeAC495271d0F
 ```
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/slwyts/web3-icons-api)
