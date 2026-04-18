@@ -3,6 +3,7 @@ export default {
     const url = new URL(request.url);
     const chainId = url.searchParams.get('chainId');
     const address = url.searchParams.get('address');
+    const CACHE_CONTROL = `public, max-age=2678400`; // 1 month
 
     if (!chainId || !address) {
       return new Response('Missing chainId or address', { status: 400 });
@@ -44,7 +45,7 @@ export default {
       const iconRes = await fetch(trustWalletNativeUrl);
       if (iconRes.ok) {
         return new Response(iconRes.body, {
-          headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' },
+          headers: { 'Content-Type': 'image/png', 'Cache-Control': CACHE_CONTROL },
         });
       }
       return new Response('Icon not found', { status: 404 });
@@ -54,7 +55,7 @@ export default {
     let iconRes = await fetch(web3iconsUrl);
     if (iconRes.ok) {
       return new Response(await iconRes.text(), {
-        headers: { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=86400' },
+        headers: { 'Content-Type': 'image/svg+xml', 'Cache-Control': CACHE_CONTROL },
       });
     }
 
@@ -63,7 +64,7 @@ export default {
     iconRes = await fetch(trustWalletUrl);
     if (iconRes.ok) {
       return new Response(iconRes.body, {
-        headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=86400' },
+        headers: { 'Content-Type': 'image/png', 'Cache-Control': CACHE_CONTROL },
       });
     }
 
