@@ -3,11 +3,12 @@ export default {
     const url = new URL(request.url);
     const chainId = url.searchParams.get('chainId');
     const address = url.searchParams.get('address');
+    const symbol = url.searchParams.get('symbol');
     const ONE_YEAR = 31536000;
     const ONE_DAY = 86400;
 
-    if (!chainId || !address) {
-      return new Response('Missing chainId or address', { status: 400 });
+    if (!chainId || (!address && !symbol)) {
+      return new Response('Missing chainId and address or symbol', { status: 400 });
     }
 
     const bust = url.searchParams.get('bust') === 'true';
@@ -85,7 +86,7 @@ export default {
       '34268394551451': 'solana',
     };
 
-    const isNativeToken = address === '0' || address.toLowerCase() === '0x0000000000000000000000000000000000000000';
+    const isNativeToken = address === '0' || address === null || address.toLowerCase() === '0x0000000000000000000000000000000000000000';
 
     const fetchWithCache = async (upstreamUrl: string, contentType: 'image/png' | 'image/svg+xml'): Promise<Response | null> => {
       const upstreamRequest = new Request(bust ? `${upstreamUrl}?bust=${Date.now()}` : upstreamUrl);
@@ -124,14 +125,26 @@ export default {
       return new Response('Icon not found', { status: 404 });
     }
 
-    const web3iconsUrl = `https://raw.githubusercontent.com/0xa3k5/web3icons/main/packages/core/src/svgs/tokens/branded/${address}.svg`;
-    const svgRes = await fetchWithCache(web3iconsUrl, 'image/svg+xml');
-    if (svgRes) return svgRes;
+    if (address) {
+      const web3iconsUrl = `https://raw.githubusercontent.com/0xa3k5/web3icons/main/packages/core/src/svgs/tokens/branded/${address}.svg`;
+      const svgRes = await fetchWithCache(web3iconsUrl, 'image/svg+xml');
+      if (svgRes) return svgRes;
 
-    const chainName = chainIdToName[chainId] || 'ethereum';
-    const trustWalletUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${chainName}/assets/${address}/logo.png`;
-    const pngRes = await fetchWithCache(trustWalletUrl, 'image/png');
-    if (pngRes) return pngRes;
+      const chainName = chainIdToName[chainId] || 'ethereum';
+      const trustWalletUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${chainName}/assets/${address}/logo.png`;
+      const pngRes = await fetchWithCache(trustWalletUrl, 'image/png');
+      if (pngRes) return pngRes;
+    }
+
+    if (symbol) {
+      const alexandriaTokenUrl = `https://alexandria-blond.vercel.app/assets/tokens/${symbol}.svg`;
+      const alexandriaRes = await fetchWithCache(alexandriaTokenUrl, 'image/svg+xml');
+      if (alexandriaRes) return alexandriaRes;
+
+      const web3iconsSymbolUrl = `https://raw.githubusercontent.com/0xa3k5/web3icons/refs/heads/main/packages/core/src/svgs/tokens/branded/${symbol}.svg`;
+      const symbolRes = await fetchWithCache(web3iconsSymbolUrl, 'image/svg+xml');
+      if (symbolRes) return symbolRes;
+    }
 
     return new Response('Icon not found', { status: 404 });
   },

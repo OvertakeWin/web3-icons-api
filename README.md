@@ -1,18 +1,45 @@
 # Cloudflare Worker: Token Icon API
 
-This project is a Cloudflare Worker that exposes an API endpoint. The endpoint accepts a chain ID and a contract address as parameters and returns the token icon. If the contract address is '0', it is treated as the native token. The icon source first tries to fetch from @web3icons/react, and if not found, falls back to the TrustWallet icon library.
+A Cloudflare Worker that returns token/chain icons given a chain ID and contract address or symbol.
 
-## Features
-- Accepts `chainId` and `address` as query parameters
-- Returns the token icon as an image (SVG/PNG)
-- Native token if address is '0'
-- Prioritizes @web3icons/react, fallback to TrustWallet icons
+## Parameters
+
+| Param | Required | Description |
+|-------|----------|-------------|
+| `chainId` | yes | EVM chain ID (e.g. `1`, `8453`) |
+| `address` | no* | Token contract address, or `0` for native token |
+| `symbol` | no* | Token symbol (e.g. `USDC`) |
+| `bust` | no | Set to `true` to bypass cache and re-fetch |
+
+*At least one of `address` or `symbol` is required.
+
+## Fallback Chain
+
+**Address only** — `address=0x...`
+1. web3icons (by address)
+2. TrustWallet (by address)
+
+**Symbol only** — `symbol=USDC`
+1. Alexandria (by symbol)
+2. web3icons (by symbol)
+
+**Both** — `address=0x...&symbol=USDC`
+1. web3icons (by address)
+2. TrustWallet (by address)
+3. Alexandria (by symbol)
+4. web3icons (by symbol)
+
+**Native token** — `address=0`
+1. TrustWallet chain logo
+2. Alexandria chain SVG
 
 ## Usage
-Deploy as a Cloudflare Worker. Example request:
 
 ```
 GET /?chainId=1&address=0x6B175474E89094C44Da98b954EedeAC495271d0F
+GET /?chainId=1&symbol=USDC
+GET /?chainId=1&address=0x6B175474E89094C44Da98b954EedeAC495271d0F&symbol=DAI
+GET /?chainId=1&address=0&bust=true
 ```
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/slwyts/web3-icons-api)
