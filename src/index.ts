@@ -27,10 +27,7 @@ export default {
       return cached;
     }
 
-    async function svgToCachedPngUrl(svg: string, size = 256) {
-      const cached = await cache.match(cacheKey);
-      if (cached && !bust) return cached;
-
+    async function svgToCachedPngUrl(svg: string, size = 128) {
       const pngData = await Resvg.async(svg, {
         fitTo: {
           mode: "width",
