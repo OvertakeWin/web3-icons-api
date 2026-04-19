@@ -117,6 +117,9 @@ export default {
       const trustWalletNativeUrl = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/${chainName}/info/logo.png`;
       const res = await fetchWithCache(trustWalletNativeUrl, 'image/png');
       if (res) return res;
+      const alexandriaChainUrl = `https://alexandria-blond.vercel.app/assets/chains/${chainName}.svg`;
+      const alexandriaRes = await fetchWithCache(alexandriaChainUrl, 'image/svg+xml');
+      if (alexandriaRes) return alexandriaRes;
       return new Response('Icon not found', { status: 404 });
     }
 
