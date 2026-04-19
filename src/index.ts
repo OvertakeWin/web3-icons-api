@@ -46,6 +46,7 @@ export default {
       '480': 'world-chain',
       '7777777': 'zora',
       '9998': 'lighter',
+      '1337': 'hypercore',
       '100': 'xdai',
       '204': 'opbnb',
       '250': 'fantom',
