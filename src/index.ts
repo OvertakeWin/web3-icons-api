@@ -10,11 +10,14 @@ export default {
       return new Response('Missing chainId or address', { status: 400 });
     }
 
+    const bust = url.searchParams.get('bust') === 'true';
+
     // Check cache first
     const cache = caches.default;
     const cacheKey = new URL(request.url);
+    cacheKey.searchParams.delete('bust');
     const cached = await cache.match(cacheKey);
-    if (cached) {
+    if (cached && !bust) {
       return cached;
     }
 
@@ -84,11 +87,11 @@ export default {
     const isNativeToken = address === '0' || address.toLowerCase() === '0x0000000000000000000000000000000000000000';
 
     const fetchWithCache = async (upstreamUrl: string, contentType: 'image/png' | 'image/svg+xml'): Promise<Response | null> => {
-      const upstreamRequest = new Request(upstreamUrl);
+      const upstreamRequest = new Request(bust ? `${upstreamUrl}?bust=${Date.now()}` : upstreamUrl);
 
       const res = await fetch(upstreamRequest, {
         cf: {
-          cacheEverything: true,
+          cacheEverything: !bust,
           cacheTtl: ONE_YEAR,
           cacheTtlByStatus: { '200-299': ONE_YEAR, '404': ONE_DAY, '500-599': 0 },
         },
