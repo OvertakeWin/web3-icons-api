@@ -8,7 +8,7 @@ A Cloudflare Worker that returns token/chain icons given a chain ID and contract
 |-------|----------|-------------|
 | `chainId` | yes | EVM chain ID* (e.g. `1`) |
 | `address` | no** | Token contract address, or `0` for native token |
-| `symbol` | no* | Token symbol (e.g. `USDC`) |
+| `symbol` | no** | Token symbol (e.g. `USDC`) |
 | `png` | no | Set to `true` to convert SVG icons to PNG |
 | `bust` | no | Set to `true` to bypass cache and re-fetch |
 
