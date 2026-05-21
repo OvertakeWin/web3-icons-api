@@ -6,13 +6,15 @@ A Cloudflare Worker that returns token/chain icons given a chain ID and contract
 
 | Param | Required | Description |
 |-------|----------|-------------|
-| `chainId` | yes | EVM chain ID (e.g. `1`, `8453`) |
-| `address` | no* | Token contract address, or `0` for native token |
+| `chainId` | yes | EVM chain ID* (e.g. `1`) |
+| `address` | no** | Token contract address, or `0` for native token |
 | `symbol` | no* | Token symbol (e.g. `USDC`) |
 | `png` | no | Set to `true` to convert SVG icons to PNG |
 | `bust` | no | Set to `true` to bypass cache and re-fetch |
 
-*At least one of `address` or `symbol` is required.
+*Solana has been mapped to `34268394551451`
+
+**At least one of `address` or `symbol` is required.
 
 ## Fallback Chain
 
